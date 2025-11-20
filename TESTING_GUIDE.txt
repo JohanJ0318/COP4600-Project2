@@ -1,0 +1,125 @@
+CONCURRENT HASH TABLE - TESTING GUIDE
+======================================
+
+Quick Start:
+-----------
+1. Unzip the project
+2. cd into the directory
+3. Run: make
+4. Run: ./chash
+5. Check output and hash.log file
+
+What's Included:
+---------------
+✓ chash.c - Main program with threading and priority management
+✓ hash_operations.c - All hash table operations (insert, delete, update, search, print)
+✓ hash_utils.c - Jenkins hash function and timestamp utility
+✓ chash.h - Header file with all declarations
+✓ Makefile - Build configuration
+✓ commands.txt - Sample input file
+✓ README.txt - Documentation and AI usage citation
+
+Sample Output from Provided commands.txt:
+-----------------------------------------
+Inserted: 2500551319, Richard Garriot, 40000
+Inserted: 3449751099, Sid Meier, 50000
+Inserted: 1874280167, Shigeru Miyamoto, 51000
+Deleted record for 3449751099, Sid Meier, 50000
+Inserted: 2569965317, Hideo Kojima, 45000
+Inserted: 448054155, Gabe Newell, 49000
+Inserted: 909366975, Roberta Williams, 45900
+Deleted record for 2500551319, Richard Garriot, 40000
+Inserted: 660427450, Carol Shaw, 41000
+Not Found: Sid Meier not found.
+Current Database:
+448054155, Gabe Newell, 49000
+660427450, Carol Shaw, 41000
+909366975, Roberta Williams, 45900
+1874280167, Shigeru Miyamoto, 51000
+2569965317, Hideo Kojima, 45000
+
+Key Features Implemented:
+-------------------------
+✓ Jenkins one-at-a-time hash function
+✓ Reader-writer locks (multiple readers, single writer)
+✓ Priority-based thread ordering using condition variables
+✓ Proper lock acquisition/release logging with timestamps
+✓ Thread waiting and awakening messages
+✓ Insert with duplicate detection
+✓ Delete with "not found" handling
+✓ Update with "not found" handling
+✓ Search with "not found" handling
+✓ Print sorted by hash value
+✓ Final database print at end
+✓ Modular code structure (multiple files)
+✓ Proper memory management (no leaks)
+
+Testing Different Commands:
+---------------------------
+You can modify commands.txt to test different scenarios:
+
+Example 1 - Test duplicates:
+insert,Alice,50000,1
+insert,Alice,60000,2
+print,3
+
+Example 2 - Test update:
+insert,Bob,40000,1
+update,Bob,45000,2
+search,Bob,3
+print,4
+
+Example 3 - Test delete:
+insert,Charlie,55000,1
+delete,Charlie,2
+search,Charlie,3
+print,4
+
+Verifying Correctness:
+---------------------
+1. Console Output: Check that operations produce expected results
+2. hash.log: Verify timestamps, thread priorities, and lock operations
+3. Final Database: Should be sorted by hash value (ascending)
+4. Lock Order: Each thread should wait its turn based on priority
+
+Log File Format:
+---------------
+The hash.log contains:
+- THREAD X WAITING FOR MY TURN
+- THREAD X AWAKENED FOR WORK
+- THREAD X <COMMAND>,<parameters>
+- THREAD X WRITE/READ LOCK ACQUIRED
+- THREAD X WRITE/READ LOCK RELEASED
+
+Common Issues and Solutions:
+---------------------------
+Issue: Program doesn't compile
+Solution: Make sure you have gcc and pthread library installed
+
+Issue: Segmentation fault
+Solution: This shouldn't happen with the provided code, but check that
+         commands.txt exists and is properly formatted
+
+Issue: Wrong hash values
+Solution: Make sure you're using the Jenkins one-at-a-time hash function
+         exactly as provided (this implementation uses the standard version)
+
+Issue: Wrong ordering in output
+Solution: The final print should be sorted by hash value. If it's not,
+         check the qsort comparison function.
+
+Performance Notes:
+-----------------
+- The program uses priority ordering, so threads execute sequentially by priority
+- Reader-writer locks allow multiple simultaneous searches
+- Insert, delete, and update require exclusive write locks
+- The linked list structure is simple but effective for this assignment
+
+Code Structure:
+--------------
+chash.h           - Defines structures and function prototypes
+hash_utils.c      - Jenkins hash and timestamp functions
+hash_operations.c - Insert, delete, update, search, print implementations
+chash.c           - Main program, command parsing, thread management
+
+Each file is focused and modular, making it easy to understand and debug.

@@ -1,0 +1,6 @@
+# Build output
+*.o
+chash
+
+# Program output — regenerated on every run
+hash.log
